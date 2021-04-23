@@ -118,8 +118,5 @@ delete_btn.grid(row=6, column=2)
 update_btn = Button(root, text = "Update entry", command = update, state = "disabled")
 update_btn.grid(row=6,column=0)
 
-newWindow_btn = Button(root, text = "New Window", command = new_window)
-newWindow_btn.grid(row=7,column=1)
-
 set_data()
 root.mainloop()
