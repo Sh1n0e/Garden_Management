@@ -65,9 +65,20 @@ def update():
 	conn.commit()
 	set_data()
 
+def new_window():
+    second_window = Toplevel(root)
+    second_window.title("Plants")
+    second_window.geometry("500x500")
+    btn_back = Button(second_window, text="BACK", command=lambda: second_window.destroy())
+    btn_back.pack()
+    btn_back = Button(second_window, text="BACK", command=lambda: second_window.destroy())
+    btn_back.pack()
+    btn_back = Button(second_window, text="BACK", command=lambda: second_window.destroy())
+    btn_back.pack()
+
 root = Tk()
 root.geometry("500x500")
-root.title("Hello World GUI")
+root.title("GardenHub")
 
 var_recordset_index = IntVar()
 var_recordset_index.set(0)
@@ -117,6 +128,9 @@ delete_btn.grid(row=6, column=2)
 
 update_btn = Button(root, text = "Update entry", command = update, state = "disabled")
 update_btn.grid(row=6,column=0)
+
+newWindow_btn = Button(root, text = "New Window", command = new_window)
+newWindow_btn.grid(row=7,column=1)
 
 set_data()
 root.mainloop()
