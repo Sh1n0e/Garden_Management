@@ -2,9 +2,10 @@ from tkinter import messagebox
 import sqlite3
 from tkinter import *
 
-root = Tk()
-root.geometry("800x800")
-root.title("GardenHub")
+def create_plant_window(root):
+    plant_window = Toplevel(root)
+    plant_window.geometry("800x800")
+    plant_window.title("GardenHub")
 
 def load_plants():
     conn = sqlite3.connect('Plants.db')
