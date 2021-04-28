@@ -2,6 +2,10 @@ from tkinter import messagebox
 import sqlite3
 from tkinter import *
 
+root = Tk()
+root.geometry("800x800")
+root.title("GardenHub")
+
 def load_plants():
     conn = sqlite3.connect('Plants.db')
     c = conn.cursor()
@@ -13,35 +17,39 @@ def load_plants():
 
 def set_plant_data():
     data = load_plants()
-    row = data[var_recordset_index.get()]
+    row = data[var_plant_index.get()]
     var_plant_id.set(row[0])
     var_harvest.set(row[2])
-    var_name.set(row[1])
+    var_plant_name.set(row[1])
 
-def next():
+
+def next_plant():
     print("Here is the next item")
-    var_recordset_index.set(var_recordset_index.get()+1)
+    var_plant_index.set(var_plant_index.get() + 1)
     set_plant_data()
 
-def prev():
+
+def prev_plant():
     print("Here is the previous item")
-    var_recordset_index.set(var_recordset_index.get() - 1)
+    var_plant_index.set(var_plant_index.get() - 1)
     set_plant_data()
 
-def new():
+
+def new_plant():
     var_plant_id.set("")
-    var_name.set("")
+    var_plant_name.set("")
     var_harvest.set("")
-    update_btn["state"] = "active"
+    update_plant_btn["state"] = "active"
     print("INSERT")
-    equipment = [var_name.get(), var_harvest.get()]
+    equipment = [var_plant_name.get(), var_harvest.get()]
     insert_query = "INSERT INTO plant VALUES (null,?,?)"
     conn = sqlite3.connect('Plants.db')
     c = conn.cursor()
     c.execute(insert_query, equipment)
     conn.commit()
 
-def delete():
+
+def delete_plant():
     MsgBox = messagebox.askquestion('DELETE RECORD',
                                     'Are you sure you want to delete the current record? This cannot be undone.',
                                     icon='warning')
@@ -55,64 +63,71 @@ def delete():
         set_plant_data()
         print("DELETED")
 
-def update():
-	print("UPDATE")
-	equipment = [var_name.get(), var_harvest.get(), var_plant_id.get()]
-	update_query = "UPDATE plant SET species=? , harvestable=? WHERE plant_id=?"
-	conn = sqlite3.connect('Plants.db')
-	c = conn.cursor()
-	c.execute(update_query, equipment)
-	conn.commit()
-	set_plant_data()
 
-var_recordset_index = IntVar()
-var_recordset_index.set(0)
+def update_plant():
+    print("UPDATE")
+    plant = [var_plant_name.get(), var_harvest.get(), var_plant_id.get()]
+    update_query = "UPDATE plant SET species=? , harvestable=? WHERE plant_id=?"
+    conn = sqlite3.connect('Plants.db')
+    c = conn.cursor()
+    c.execute(update_query, plant)
+    conn.commit()
+    set_plant_data()
 
-var_recordset_index = IntVar()
-var_recordset_index.set(0)
+Plant_window_label = Label(root, text="Garden system: Plants")
+Plant_window_label.place(relx=0.2, rely=0.2, anchor=CENTER)
 
-Equipment_window_label = Label(root, text="Garden system: Plants")
-Equipment_window_label.grid(row =0 ,column =1 )
+var_plant_index = IntVar()
+var_plant_index.set(0)
 
 var_plant_id = StringVar(root)
-var_name = StringVar(root)
+var_plant_name = StringVar(root)
 var_harvest = StringVar(root)
 
 plant_id = Label(root, text="Plant ID:")
-plant_id.grid(row=1, column =0)
+plant_id.place(relx=0.1, rely=0.3, anchor=CENTER)
 plant_id_entry = Entry(root)
-entry_plant_id = Entry(root, textvariable = var_plant_id)
-entry_plant_id.grid(row=1, column=1)
+entry_plant_id = Entry(root, textvariable=var_plant_id)
+entry_plant_id.place(relx=0.2, rely=0.3, anchor=CENTER)
 
-name = Label(root, text="Plant name:")
-name.grid(row=2, column =0 )
-name_entry = Entry(root)
-entry_name = Entry(root, textvariable = var_name)
-entry_name.grid(row=2, column=1)
 
-quantity = Label(root, text="Harvestable?:")
-quantity.grid(row=3, column=0)
-quantity_entry = Entry(root)
-entry_quantity = Entry(root, textvariable = var_harvest)
-entry_quantity.grid(row=3, column=1)
+plant_name = Label(root, text="Plant name:")
+plant_name.place(relx=0.1, rely=0.4, anchor=CENTER)
+plant_name_entry = Entry(root)
+entry_plant_name = Entry(root, textvariable=var_plant_name)
+entry_plant_name.place(relx=0.2, rely=0.4, anchor=CENTER)
 
-load_plants_btn = Button(root, text = "Load", command = load_plants)
-load_plants_btn.grid(row=6, column=1)
 
-next_btn = Button(root, text=">", command = next)
-next_btn.grid(row=5, column=2)
+Harvest = Label(root, text="Harvestable?:")
+Harvest.place(relx=0.1, rely=0.5, anchor=CENTER)
+Harvest_entry = Entry(root)
+entry_Harvest = Entry(root, textvariable=var_harvest)
+entry_Harvest.place(relx=0.2, rely=0.5, anchor=CENTER)
 
-prev_btn = Button(root, text="<", command = prev)
-prev_btn.grid(row=5, column=0)
 
-new_btn = Button(root, text="New data", command = new)
-new_btn.grid(row=2, column=2)
+load_plants_btn = Button(root, text="Load", command=load_plants)
+load_plants_btn.place(relx=0.2, rely=0.6, anchor=CENTER)
 
-delete_btn = Button(root, text = "Delete entry", command = delete)
-delete_btn.grid(row=6, column=2)
 
-update_btn = Button(root, text = "Update entry", command = update, state = "disabled")
-update_btn.grid(row=6,column=0)
+next_plant_btn = Button(root, text=">", command=next_plant)
+next_plant_btn.place(relx=0.3, rely=0.6, anchor=CENTER)
+
+
+prev_plant_btn = Button(root, text="<", command=prev_plant)
+prev_plant_btn.place(relx=0.1, rely=0.6, anchor=CENTER)
+
+
+new_plant_btn = Button(root, text="New data", command=new_plant)
+new_plant_btn.place(relx=0.4, rely=0.5, anchor=CENTER)
+
+
+delete_plant_btn = Button(root, text="Delete entry", command=delete_plant)
+delete_plant_btn.place(relx=0.4, rely=0.4, anchor=CENTER)
+
+
+update_plant_btn = Button(root, text="Update entry", command=update_plant, state="disabled")
+update_plant_btn.place(relx=0.4, rely=0.3, anchor=CENTER)
+
 
 set_plant_data()
 root.mainloop()
