@@ -2,11 +2,6 @@ from tkinter import messagebox
 import sqlite3
 from tkinter import *
 
-def create_plant_window(root):
-    plant_window = Toplevel(root)
-    plant_window.geometry("800x800")
-    plant_window.title("GardenHub")
-
 def load_plants():
     conn = sqlite3.connect('Plants.db')
     c = conn.cursor()
@@ -75,60 +70,62 @@ def update_plant():
     conn.commit()
     set_plant_data()
 
-Plant_window_label = Label(root, text="Garden system: Plants")
-Plant_window_label.place(relx=0.2, rely=0.2, anchor=CENTER)
+plant_window = Tk()
+plant_window.geometry("800x800")
+Plant_window_label = Label(plant_window, text="Garden system: Plants")
+Plant_window_label.place(relx=0.3, rely=0.2, anchor=CENTER)
 
 var_plant_index = IntVar()
 var_plant_index.set(0)
 
-var_plant_id = StringVar(root)
-var_plant_name = StringVar(root)
-var_harvest = StringVar(root)
+var_plant_id = StringVar(plant_window)
+var_plant_name = StringVar(plant_window)
+var_harvest = StringVar(plant_window)
 
-plant_id = Label(root, text="Plant ID:")
+plant_id = Label(plant_window, text="Plant ID:")
 plant_id.place(relx=0.1, rely=0.3, anchor=CENTER)
-plant_id_entry = Entry(root)
-entry_plant_id = Entry(root, textvariable=var_plant_id)
-entry_plant_id.place(relx=0.2, rely=0.3, anchor=CENTER)
+plant_id_entry = Entry(plant_window)
+entry_plant_id = Entry(plant_window, textvariable=var_plant_id)
+entry_plant_id.place(relx=0.3, rely=0.3, anchor=CENTER)
 
 
-plant_name = Label(root, text="Plant name:")
+plant_name = Label(plant_window, text="Plant name:")
 plant_name.place(relx=0.1, rely=0.4, anchor=CENTER)
-plant_name_entry = Entry(root)
-entry_plant_name = Entry(root, textvariable=var_plant_name)
-entry_plant_name.place(relx=0.2, rely=0.4, anchor=CENTER)
+plant_name_entry = Entry(plant_window)
+entry_plant_name = Entry(plant_window, textvariable=var_plant_name)
+entry_plant_name.place(relx=0.3, rely=0.4, anchor=CENTER)
 
 
-Harvest = Label(root, text="Harvestable?:")
+Harvest = Label(plant_window, text="Harvestable?:")
 Harvest.place(relx=0.1, rely=0.5, anchor=CENTER)
-Harvest_entry = Entry(root)
-entry_Harvest = Entry(root, textvariable=var_harvest)
-entry_Harvest.place(relx=0.2, rely=0.5, anchor=CENTER)
+Harvest_entry = Entry(plant_window)
+entry_Harvest = Entry(plant_window, textvariable=var_harvest)
+entry_Harvest.place(relx=0.3, rely=0.5, anchor=CENTER)
 
 
-load_plants_btn = Button(root, text="Load", command=load_plants)
-load_plants_btn.place(relx=0.2, rely=0.6, anchor=CENTER)
+load_plants_btn = Button(plant_window, text="Load", command=load_plants)
+load_plants_btn.place(relx=0.3, rely=0.6, anchor=CENTER)
 
 
-next_plant_btn = Button(root, text=">", command=next_plant)
-next_plant_btn.place(relx=0.3, rely=0.6, anchor=CENTER)
+next_plant_btn = Button(plant_window, text=">", command=next_plant)
+next_plant_btn.place(relx=0.4, rely=0.6, anchor=CENTER)
 
 
-prev_plant_btn = Button(root, text="<", command=prev_plant)
-prev_plant_btn.place(relx=0.1, rely=0.6, anchor=CENTER)
+prev_plant_btn = Button(plant_window, text="<", command=prev_plant)
+prev_plant_btn.place(relx=0.2, rely=0.6, anchor=CENTER)
 
 
-new_plant_btn = Button(root, text="New data", command=new_plant)
-new_plant_btn.place(relx=0.4, rely=0.5, anchor=CENTER)
+new_plant_btn = Button(plant_window, text="New data", command=new_plant)
+new_plant_btn.place(relx=0.5, rely=0.5, anchor=CENTER)
 
 
-delete_plant_btn = Button(root, text="Delete entry", command=delete_plant)
-delete_plant_btn.place(relx=0.4, rely=0.4, anchor=CENTER)
+delete_plant_btn = Button(plant_window, text="Delete entry", command=delete_plant)
+delete_plant_btn.place(relx=0.5, rely=0.4, anchor=CENTER)
 
 
-update_plant_btn = Button(root, text="Update entry", command=update_plant, state="disabled")
-update_plant_btn.place(relx=0.4, rely=0.3, anchor=CENTER)
+update_plant_btn = Button(plant_window, text="Update entry", command=update_plant, state="disabled")
+update_plant_btn.place(relx=0.5, rely=0.3, anchor=CENTER)
 
 
 set_plant_data()
-root.mainloop()
+plant_window.mainloop()
