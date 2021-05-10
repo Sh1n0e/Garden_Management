@@ -1,131 +1,122 @@
-from tkinter import messagebox
 import sqlite3
-from tkinter import *
+import tkinter as tk
 
-def load_plants():
-    conn = sqlite3.connect('Plants.db')
-    c = conn.cursor()
-    c.execute("SELECT * FROM plant")
-    data = c.fetchall()
-    row = data[0]
-    print(row[1])
-    return data
+class Plants(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        self.Plant_window_label = tk.Label(self, text="Garden system: Plants")
+        self.Plant_window_label.place(relx=0.3, rely=0.2, anchor=tk.CENTER)
 
-def set_plant_data():
-    data = load_plants()
-    row = data[var_plant_index.get()]
-    var_plant_id.set(row[0])
-    var_harvest.set(row[2])
-    var_plant_name.set(row[1])
+        self.var_plant_index = tk.IntVar()
+        self.var_plant_index.set(0)
 
+        self.var_plant_id = tk.StringVar(self)
+        self.var_plant_name = tk.StringVar(self)
+        self.var_harvest = tk.StringVar(self)
 
-def next_plant():
-    print("Here is the next item")
-    var_plant_index.set(var_plant_index.get() + 1)
-    set_plant_data()
+        self.plant_id = tk.Label(self, text="Plant ID:")
+        self.plant_id.place(relx=0.1, rely=0.3, anchor=tk.CENTER)
+        self.plant_id_entry = tk.Entry(self)
+        self.entry_plant_id = tk.Entry(self, textvariable=self.var_plant_id)
+        self.entry_plant_id.place(relx=0.3, rely=0.3, anchor=tk.CENTER)
 
+        self.plant_name = tk.Label(self, text="Plant name:")
+        self.plant_name.place(relx=0.1, rely=0.4, anchor=tk.CENTER)
+        self.plant_name_entry = tk.Entry(self)
+        self.entry_plant_name = tk.Entry(self, textvariable=self.var_plant_name)
+        self.entry_plant_name.place(relx=0.3, rely=0.4, anchor=tk.CENTER)
 
-def prev_plant():
-    print("Here is the previous item")
-    var_plant_index.set(var_plant_index.get() - 1)
-    set_plant_data()
+        self.Harvest = tk.Label(self, text="Harvestable?:")
+        self.Harvest.place(relx=0.1, rely=0.5, anchor=tk.CENTER)
+        self.Harvest_entry = tk.Entry(self)
+        self.entry_Harvest = tk.Entry(self, textvariable=self.var_harvest)
+        self.entry_Harvest.place(relx=0.3, rely=0.5, anchor=tk.CENTER)
 
+        self.load_plants_btn = tk.Button(self, text="Load", command=self.load_plants)
+        self.load_plants_btn.place(relx=0.3, rely=0.6, anchor=tk.CENTER)
 
-def new_plant():
-    var_plant_id.set("")
-    var_plant_name.set("")
-    var_harvest.set("")
-    update_plant_btn["state"] = "active"
-    print("INSERT")
-    equipment = [var_plant_name.get(), var_harvest.get()]
-    insert_query = "INSERT INTO plant VALUES (null,?,?)"
-    conn = sqlite3.connect('Plants.db')
-    c = conn.cursor()
-    c.execute(insert_query, equipment)
-    conn.commit()
+        self.next_plant_btn = tk.Button(self, text=">", command=self.next_plant)
+        self.next_plant_btn.place(relx=0.4, rely=0.6, anchor=tk.CENTER)
 
+        self.prev_plant_btn = tk.Button(self, text="<", command=self.prev_plant)
+        self.prev_plant_btn.place(relx=0.2, rely=0.6, anchor=tk.CENTER)
 
-def delete_plant():
-    MsgBox = messagebox.askquestion('DELETE RECORD',
-                                    'Are you sure you want to delete the current record? This cannot be undone.',
-                                    icon='warning')
-    if MsgBox == 'yes':
+        self.new_plant_btn = tk.Button(self, text="New data", command=self.new_plant)
+        self.new_plant_btn.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+
+        self.delete_plant_btn = tk.Button(self, text="Delete entry", command=self.delete_plant)
+        self.delete_plant_btn.place(relx=0.5, rely=0.4, anchor=tk.CENTER)
+
+        self.update_plant_btn = tk.Button(self, text="Update entry", command=self.update_plant, state="disabled")
+        self.update_plant_btn.place(relx=0.5, rely=0.3, anchor=tk.CENTER)
+
+        self.set_plant_data()
+
+    def load_plants(self):
         conn = sqlite3.connect('Plants.db')
         c = conn.cursor()
-        delete_query = "DELETE FROM plant WHERE plant_id=" + str(var_plant_id.get())
-        print(delete_query)
-        c.execute(delete_query)
+        c.execute("SELECT * FROM plant")
+        data = c.fetchall()
+        row = data[0]
+        print(row[1])
+        return data
+
+    def set_plant_data(self):
+        data = self.load_plants()
+        row = data[self.var_plant_index.get()]
+        self.var_plant_id.set(row[0])
+        self.var_harvest.set(row[2])
+        self.var_plant_name.set(row[1])
+
+
+    def next_plant(self):
+        print("Here is the next item")
+        self.var_plant_index.set(self.var_plant_index.get() + 1)
+        self.set_plant_data()
+
+
+    def prev_plant(self):
+        print("Here is the previous item")
+        self.var_plant_index.set(self.var_plant_index.get() - 1)
+        self.set_plant_data()
+
+
+    def new_plant(self):
+        self.var_plant_id.set("")
+        self.var_plant_name.set("")
+        self.var_harvest.set("")
+        self.update_plant_btn["state"] = "active"
+        print("INSERT")
+        equipment = [self.var_plant_name.get(), self.var_harvest.get()]
+        insert_query = "INSERT INTO plant VALUES (null,?,?)"
+        conn = sqlite3.connect('Plants.db')
+        c = conn.cursor()
+        c.execute(insert_query, equipment)
         conn.commit()
-        set_plant_data()
-        print("DELETED")
 
 
-def update_plant():
-    print("UPDATE")
-    plant = [var_plant_name.get(), var_harvest.get(), var_plant_id.get()]
-    update_query = "UPDATE plant SET species=? , harvestable=? WHERE plant_id=?"
-    conn = sqlite3.connect('Plants.db')
-    c = conn.cursor()
-    c.execute(update_query, plant)
-    conn.commit()
-    set_plant_data()
-
-plant_window = Tk()
-plant_window.geometry("800x800")
-Plant_window_label = Label(plant_window, text="Garden system: Plants")
-Plant_window_label.place(relx=0.3, rely=0.2, anchor=CENTER)
-
-var_plant_index = IntVar()
-var_plant_index.set(0)
-
-var_plant_id = StringVar(plant_window)
-var_plant_name = StringVar(plant_window)
-var_harvest = StringVar(plant_window)
-
-plant_id = Label(plant_window, text="Plant ID:")
-plant_id.place(relx=0.1, rely=0.3, anchor=CENTER)
-plant_id_entry = Entry(plant_window)
-entry_plant_id = Entry(plant_window, textvariable=var_plant_id)
-entry_plant_id.place(relx=0.3, rely=0.3, anchor=CENTER)
+    def delete_plant(self):
+        tk.MsgBox = tk.messagebox.askquestion('DELETE RECORD',
+                                        'Are you sure you want to delete the current record? This cannot be undone.',
+                                        icon='warning')
+        if tk.MsgBox == 'yes':
+            conn = sqlite3.connect('Plants.db')
+            c = conn.cursor()
+            delete_query = "DELETE FROM plant WHERE plant_id=" + str(self.var_plant_id.get())
+            print(delete_query)
+            c.execute(delete_query)
+            conn.commit()
+            self.set_plant_data()
+            print("DELETED")
 
 
-plant_name = Label(plant_window, text="Plant name:")
-plant_name.place(relx=0.1, rely=0.4, anchor=CENTER)
-plant_name_entry = Entry(plant_window)
-entry_plant_name = Entry(plant_window, textvariable=var_plant_name)
-entry_plant_name.place(relx=0.3, rely=0.4, anchor=CENTER)
+    def update_plant(self):
+        print("UPDATE")
+        plant = [self.var_plant_name.get(), self.var_harvest.get(), self.var_plant_id.get()]
+        update_query = "UPDATE plant SET species=? , harvestable=? WHERE plant_id=?"
+        conn = sqlite3.connect('Plants.db')
+        c = conn.cursor()
+        c.execute(update_query, plant)
+        conn.commit()
+        self.set_plant_data()
 
-
-Harvest = Label(plant_window, text="Harvestable?:")
-Harvest.place(relx=0.1, rely=0.5, anchor=CENTER)
-Harvest_entry = Entry(plant_window)
-entry_Harvest = Entry(plant_window, textvariable=var_harvest)
-entry_Harvest.place(relx=0.3, rely=0.5, anchor=CENTER)
-
-
-load_plants_btn = Button(plant_window, text="Load", command=load_plants)
-load_plants_btn.place(relx=0.3, rely=0.6, anchor=CENTER)
-
-
-next_plant_btn = Button(plant_window, text=">", command=next_plant)
-next_plant_btn.place(relx=0.4, rely=0.6, anchor=CENTER)
-
-
-prev_plant_btn = Button(plant_window, text="<", command=prev_plant)
-prev_plant_btn.place(relx=0.2, rely=0.6, anchor=CENTER)
-
-
-new_plant_btn = Button(plant_window, text="New data", command=new_plant)
-new_plant_btn.place(relx=0.5, rely=0.5, anchor=CENTER)
-
-
-delete_plant_btn = Button(plant_window, text="Delete entry", command=delete_plant)
-delete_plant_btn.place(relx=0.5, rely=0.4, anchor=CENTER)
-
-
-update_plant_btn = Button(plant_window, text="Update entry", command=update_plant, state="disabled")
-update_plant_btn.place(relx=0.5, rely=0.3, anchor=CENTER)
-
-
-set_plant_data()
-plant_window.mainloop()
