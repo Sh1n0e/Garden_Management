@@ -1,8 +1,10 @@
 import tkinter as tk
 import sqlite3
+import PlantFrame as pf
 
 LARGE_FONT = ("Verdana", 12)
-MEDUIM_FONT = ("Verdana", 10)
+MEDIUM_FONT = ("Verdana", 10)
+
 
 
 class Gardenhub(tk.Tk):
@@ -18,12 +20,12 @@ class Gardenhub(tk.Tk):
 
         self.frames = {}
 
-        for F in (StartPage, PageOne, PageTwo):
-            frame = F(container, self)
+        for F in (StartPage, PageOne, PageTwo, pf.Plants):
+            frame = F(self, container)
 
             self.frames[F] = frame
 
-            frame.grid(row=0, column=0, sticky="nsew")
+        self.frames[StartPage].grid(row=0, column=0, sticky="nsew")
 
         self.show_frame(StartPage)
 
@@ -36,7 +38,7 @@ class StartPage(tk.Frame):
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="Welcome to the garden", font=MEDUIM_FONT)
+        label = tk.Label(self, text="Welcome to the garden", font=MEDIUM_FONT)
         label.pack(pady=10, padx=10)
 
         button = tk.Button(self, text="Visit Plant Page",
@@ -46,6 +48,10 @@ class StartPage(tk.Frame):
         button2 = tk.Button(self, text="Visit Equipment Page",
                             command=lambda: controller.show_frame(PageTwo))
         button2.pack()
+
+        button3 = tk.Button(self, text="Test page",
+                            command=lambda: controller.show_frame(pf.Plants))
+        button3.pack()
 
 
 
@@ -80,13 +86,19 @@ class PageOne(tk.Frame):
         harvestable_entry = tk.Entry(self, width=30, bd=5)
         harvestable_entry.pack()
 
+        next_plant = tk.Button(self, text=">")
+        next_plant.pack()
+
+        prev_plant = tk.Button(self, text="<")
+        prev_plant.pack()
+
 
 
 class PageTwo(tk.Frame):
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="Equipment Page!!!", font=MEDUIM_FONT)
+        label = tk.Label(self, text="Equipment Page!!!", font=MEDIUM_FONT)
         label.pack(pady=10, padx=10)
 
         button1 = tk.Button(self, text="Back to Home",
