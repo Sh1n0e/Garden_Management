@@ -1,63 +1,27 @@
-from tkcalendar import Calendar, DateEntry
-try:
-    import tkinter as tk
-    from tkinter import ttk
-except ImportError:
-    import Tkinter as tk
-    import ttk
+# Import Required Library
+import tkinter as tk
+from datetime import date
+import tkcalendar as cal
 
 
-def example1():
-    def print_sel():
-        print(cal.selection_get())
-        cal.see(datetime.date(year=2016, month=2, day=5))
+class Calendar(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        # Add Calender
+        self.cal = cal.Calendar(self, selectmode='day',
+                            year=2020, month=5,
+                            day=22)
+        self.cal.grid(row=0, column=0)
 
-    top = tk.Toplevel(root)
+        # Add Button and Label
+        Get_date=tk.Button(self, text="Get Date",
+                  command=self.grad_date)
+        Get_date.grid(row=1, column=1)
 
-    import datetime
-    today = datetime.date.today()
+        C_date = tk.Label(self, text="")
+        C_date.grid(row=2, column=0)
 
-    mindate = datetime.date(year=2018, month=1, day=21)
-    maxdate = today + datetime.timedelta(days=5)
-    print(mindate, maxdate)
-
-    cal = Calendar(top, font="Arial 14", selectmode='day', locale='en_US',
-                   mindate=mindate, maxdate=maxdate, disabledforeground='red',
-                   cursor="hand1", year=2018, month=2, day=5)
-    cal.pack(fill="both", expand=True)
-    ttk.Button(top, text="ok", command=print_sel).pack()
-
-
-def example2():
-
-    top = tk.Toplevel(root)
-
-    cal = Calendar(top, selectmode='none')
-    date = cal.datetime.today() + cal.timedelta(days=2)
-    cal.calevent_create(date, 'Hello World', 'message')
-    cal.calevent_create(date, 'Reminder 2', 'reminder')
-    cal.calevent_create(date + cal.timedelta(days=-2), 'Reminder 1', 'reminder')
-    cal.calevent_create(date + cal.timedelta(days=3), 'Message', 'message')
-
-    cal.tag_config('reminder', background='red', foreground='yellow')
-
-    cal.pack(fill="both", expand=True)
-    ttk.Label(top, text="Hover over the events.").pack()
+    def grad_date(self):
+        date.config(text="Selected Date is: " + self.cal.get_date())
 
 
-def example3():
-    top = tk.Toplevel(root)
-
-    ttk.Label(top, text='Choose date').pack(padx=10, pady=10)
-
-    cal = DateEntry(top, width=12, background='darkblue',
-                    foreground='white', borderwidth=2, year=2010)
-    cal.pack(padx=10, pady=10)
-
-
-root = tk.Tk()
-ttk.Button(root, text='Calendar', command=example1).pack(padx=10, pady=10)
-ttk.Button(root, text='Calendar with events', command=example2).pack(padx=10, pady=10)
-ttk.Button(root, text='DateEntry', command=example3).pack(padx=10, pady=10)
-
-root.mainloop()
