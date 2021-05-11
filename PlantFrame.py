@@ -1,5 +1,6 @@
 import sqlite3
 import tkinter as tk
+from tkinter import messagebox
 
 class Plants(tk.Frame):
     def __init__(self, parent, controller):
@@ -18,10 +19,10 @@ class Plants(tk.Frame):
         self.plant_id.grid()
         self.plant_id_entry = tk.Entry(self)
         self.entry_plant_id = tk.Entry(self, textvariable=self.var_plant_id)
-        self.entry_plant_id.grid(row=1, column=0)
+        self.entry_plant_id.grid(row=1, column=1)
 
         self.plant_name = tk.Label(self, text="Plant name:")
-        self.plant_name.grid(row=2, column=-0)
+        self.plant_name.grid(row=2, column=0)
         self.plant_name_entry = tk.Entry(self)
         self.entry_plant_name = tk.Entry(self, textvariable=self.var_plant_name)
         self.entry_plant_name.grid(row=2, column=1)
@@ -33,24 +34,25 @@ class Plants(tk.Frame):
         self.entry_Harvest.grid(row=3, column=1)
 
         self.load_plants_btn = tk.Button(self, text="Load", command=self.load_plants)
-        self.load_plants_btn.grid(row=5, column=2)
+        self.load_plants_btn.grid(row=2, column=2)
 
         self.next_plant_btn = tk.Button(self, text=">", command=self.next_plant)
-        self.next_plant_btn.grid(row=6, column=1)
+        self.next_plant_btn.grid(row=4, column=2)
 
         self.prev_plant_btn = tk.Button(self, text="<", command=self.prev_plant)
-        self.prev_plant_btn.grid(row=6, column=3)
+        self.prev_plant_btn.grid(row=4, column=0)
 
         self.new_plant_btn = tk.Button(self, text="New data", command=self.new_plant)
-        self.new_plant_btn.grid(row=5, column=3)
+        self.new_plant_btn.grid(row=4, column=1)
 
         self.delete_plant_btn = tk.Button(self, text="Delete entry", command=self.delete_plant)
-        self.delete_plant_btn.grid(row=3, column=3)
+        self.delete_plant_btn.grid(row=1, column=2)
 
         self.update_plant_btn = tk.Button(self, text="Update entry", command=self.update_plant, state="disabled")
-        self.update_plant_btn.grid(row=4, column=3)
-
+        self.update_plant_btn.grid(row=3, column=2)
         self.set_plant_data()
+
+
 
     def load_plants(self):
         conn = sqlite3.connect('Plants.db')
@@ -96,10 +98,10 @@ class Plants(tk.Frame):
 
 
     def delete_plant(self):
-        tk.MsgBox = tk.messagebox.askquestion('DELETE RECORD',
+        MsgBox = messagebox.showwarning('DELETE RECORD',
                                         'Are you sure you want to delete the current record? This cannot be undone.',
                                         icon='warning')
-        if tk.MsgBox == 'yes':
+        if MsgBox == 'ok':
             conn = sqlite3.connect('Plants.db')
             c = conn.cursor()
             delete_query = "DELETE FROM plant WHERE plant_id=" + str(self.var_plant_id.get())

@@ -1,6 +1,6 @@
 import tkinter as tk
-import sqlite3
 import PlantFrame as pf
+import EquipFrame as eq
 
 LARGE_FONT = ("Verdana", 12)
 MEDIUM_FONT = ("Verdana", 10)
@@ -19,7 +19,7 @@ class Gardenhub(tk.Tk):
 
         self.frames = {}
 
-        for F in (StartPage, PageOne, pf.Plants):
+        for F in (StartPage, pf.Plants, eq.Equipment):
             frame = F(self, container)
 
             self.frames[F] = frame
@@ -41,29 +41,12 @@ class StartPage(tk.Frame):
         label.grid(row=1, column=1)
 
         button1 = tk.Button(self, text="Visit Equipment Page",
-                            command=lambda: parent.show_frame(PageOne))
+                            command=lambda: parent.show_frame(eq.Equipment))
         button1.grid(row=3, column=1)
 
-        button2 = tk.Button(self, text="Test page",
-                            command=lambda: controller.show_frame(pf.Plants))
+        button2 = tk.Button(self, text="Plant page",
+                            command=lambda: parent.show_frame(pf.Plants))
         button2.grid(row=4, column=1)
-
-
-class PageOne(tk.Frame):
-
-    def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="Equipment Page!!!", font=MEDIUM_FONT)
-        label.grid(row=1, column=1)
-
-        button1 = tk.Button(self, text="Back to Home",
-                            command=lambda: controller.show_frame(StartPage))
-        button1.grid(row=2, column=1)
-
-        button2 = tk.Button(self, text="Visit plant page",
-                            command=lambda: controller.show_frame(PageOne))
-        button2.grid(row=3, column=2)
-
 
 app = Gardenhub()
 app.mainloop()
