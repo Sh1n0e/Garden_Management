@@ -2,11 +2,13 @@ import sqlite3
 import tkinter as tk
 from tkinter import messagebox
 
+
+
 class Plants(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.Plant_window_label = tk.Label(self, text="Garden system: Plants")
-        self.Plant_window_label.grid(row=0, column=1 )
+        self.Plant_window_label.grid(row=0, column=1)
 
         self.var_plant_index = tk.IntVar()
         self.var_plant_index.set(0)
@@ -34,7 +36,7 @@ class Plants(tk.Frame):
         self.entry_Harvest.grid(row=3, column=1)
 
         self.load_plants_btn = tk.Button(self, text="Load", command=self.load_plants)
-        self.load_plants_btn.grid(row=2, column=2)
+        self.load_plants_btn.grid(row=5, column=1)
 
         self.next_plant_btn = tk.Button(self, text=">", command=self.next_plant)
         self.next_plant_btn.grid(row=4, column=2)
@@ -43,13 +45,17 @@ class Plants(tk.Frame):
         self.prev_plant_btn.grid(row=4, column=0)
 
         self.new_plant_btn = tk.Button(self, text="New data", command=self.new_plant)
-        self.new_plant_btn.grid(row=4, column=1)
+        self.new_plant_btn.grid(row=2, column=2)
 
         self.delete_plant_btn = tk.Button(self, text="Delete entry", command=self.delete_plant)
-        self.delete_plant_btn.grid(row=1, column=2)
+        self.delete_plant_btn.grid(row=5, column=2)
 
         self.update_plant_btn = tk.Button(self, text="Update entry", command=self.update_plant, state="disabled")
-        self.update_plant_btn.grid(row=3, column=2)
+        self.update_plant_btn.grid(row=5, column=0)
+
+        self.home_btn = tk.Button(self, text="Return to home page", command=lambda:controller.show_frame(0))
+        self.home_btn.grid(row=4, column=1)
+
         self.set_plant_data()
 
 
@@ -98,10 +104,10 @@ class Plants(tk.Frame):
 
 
     def delete_plant(self):
-        MsgBox = messagebox.showwarning('DELETE RECORD',
+        DltBox = messagebox.showwarning('DELETE RECORD',
                                         'Are you sure you want to delete the current record? This cannot be undone.',
                                         icon='warning')
-        if MsgBox == 'ok':
+        if DltBox == 'ok':
             conn = sqlite3.connect('Plants.db')
             c = conn.cursor()
             delete_query = "DELETE FROM plant WHERE plant_id=" + str(self.var_plant_id.get())
@@ -113,6 +119,7 @@ class Plants(tk.Frame):
 
 
     def update_plant(self):
+        messagebox.showinfo("update", "All changes have been saved", icon="info")
         print("UPDATE")
         plant = [self.var_plant_name.get(), self.var_harvest.get(), self.var_plant_id.get()]
         update_query = "UPDATE plant SET species=? , harvestable=? WHERE plant_id=?"
@@ -121,4 +128,5 @@ class Plants(tk.Frame):
         c.execute(update_query, plant)
         conn.commit()
         self.set_plant_data()
+
 

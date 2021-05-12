@@ -2,6 +2,7 @@ from tkinter import messagebox
 import sqlite3
 import tkinter as tk
 
+
 class Equipment(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
@@ -53,6 +54,9 @@ class Equipment(tk.Frame):
 
         self.update_btn = tk.Button(self, text = "Update entry", command = self.update, state = "disabled")
         self.update_btn.grid(row=6,column=0)
+
+        self.home_btn = tk.Button(self, text="Return to home page", command=lambda: controller.show_frame(0))
+        self.home_btn.grid(row=5, column=1)
 
         self.set_data()
 
@@ -110,6 +114,7 @@ class Equipment(tk.Frame):
             print("DELETED")
 
     def update(self):
+        messagebox.showinfo("update", "All changes have been saved", icon="info")
         print("UPDATE")
         equipment = [self.var_name.get(), self.var_quantity.get(), self.var_equipment_id.get()]
         update_query = "UPDATE equipment SET type=? , quantity=? WHERE equipment_id=?"

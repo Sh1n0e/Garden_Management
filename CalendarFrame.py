@@ -1,6 +1,5 @@
 # Import Required Library
 import tkinter as tk
-from datetime import date
 import tkcalendar as cal
 
 
@@ -13,15 +12,9 @@ class Calendar(tk.Frame):
                             day=22)
         self.cal.grid(row=0, column=0)
 
-        # Add Button and Label
-        Get_date=tk.Button(self, text="Get Date",
-                  command=self.grad_date)
-        Get_date.grid(row=1, column=1)
+        self.home_btn = tk.Button(self, text="Return to home page", command=lambda: controller.show_frame(0))
+        self.home_btn.grid(row=1, column=0)
 
-        C_date = tk.Label(self, text="")
-        C_date.grid(row=2, column=0)
 
-    def grad_date(self):
-        date.config(text="Selected Date is: " + self.cal.get_date())
 
 
