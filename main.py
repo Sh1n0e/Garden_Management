@@ -2,6 +2,7 @@ import tkinter as tk
 import PlantFrame as pf
 import EquipFrame as eq
 import CalendarFrame as ca
+import Information as im
 
 LARGE_FONT = ("Verdana", 12)
 MEDIUM_FONT = ("Verdana", 10)
@@ -22,8 +23,9 @@ class Gardenhub(tk.Tk):
         myPlantFrame = pf.Plants(container, self)
         myEquipmentFrame = eq.Equipment(container, self)
         myCalendarFrame = ca.Calendar(container, self)
+        myInformationFrame = im.plantInformation(container, self)
 
-        self.frames = [myStartPage, myPlantFrame, myEquipmentFrame, myCalendarFrame]
+        self.frames = [myStartPage, myPlantFrame, myEquipmentFrame, myCalendarFrame, myInformationFrame]
 
         for F in self.frames:
             F.grid(row=0, column=0, sticky="nsew")
@@ -54,7 +56,9 @@ class StartPage(tk.Frame):
                             command=lambda: controller.show_frame(3))
         button3.grid(row=5, column=1)
 
-
+        button4 = tk.Button(self, text="Information page",
+                            command=lambda: controller.show_frame(4))
+        button4.grid(row=6, column=1)
 
 app = Gardenhub()
 app.mainloop()

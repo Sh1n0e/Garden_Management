@@ -1,0 +1,4 @@
+Dummy text file 2
+
+Proof the file has been changed
+
