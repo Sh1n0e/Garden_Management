@@ -12,8 +12,12 @@ class Calendar(tk.Frame):
                             day=22)
         self.cal.grid(row=0, column=0)
 
+
+
         self.home_btn = tk.Button(self, text="Return to home page", command=lambda: controller.show_frame(0))
         self.home_btn.grid(row=1, column=0)
+
+
 
 
 

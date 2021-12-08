@@ -16,8 +16,8 @@ class Gardenhub(tk.Tk):
 
         container.grid(row=0, column=0)
 
-        container.grid_rowconfigure(0, weight=1)
-        container.grid_columnconfigure(0, weight=1)
+        container.grid_rowconfigure(1, weight=2)
+        container.grid_columnconfigure(1, weight=2)
 
         myStartPage = StartPage(container, self)
         myPlantFrame = pf.Plants(container, self)
@@ -44,7 +44,7 @@ class StartPage(tk.Frame):
         label = tk.Label(self, text="Welcome to the garden", font=MEDIUM_FONT)
         label.grid(row=1, column=1)
 
-        button1 = tk.Button(self, text="Visit Equipment Page",
+        button1 = tk.Button(self, text="Equipment Page",
                             command=lambda: controller.show_frame(2))
         button1.grid(row=3, column=1)
 
